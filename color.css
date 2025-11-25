@@ -38,17 +38,34 @@ body {
     font-weight: 600;
     color: #333;
 }
-.main .display{
-  height:100px;
-  width: 100px;
-  background-color: green;
-  color: white;
-  border-radius: 50%;
-  margin:20px 50% 10px 50%;
-  transform: translateX(-50%);
+.display {
+    width: 150px;
+    height: 150px;
+    background: green;
+    border-radius: 50%;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
-/* Input field */
+.display p {
+    margin:0px;
+    font-size: 40px;
+    color: white;
+}
+
+.display span {
+    width: 90px;
+    height: 3px;
+    background: white;
+    display: block;
+    transform: rotate(-45deg);
+    margin: 10px 0; 
+}
+
 #task {
     width: 100%;
     padding: 12px 14px;
