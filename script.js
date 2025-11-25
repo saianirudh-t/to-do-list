@@ -2,11 +2,27 @@ sub = document.querySelector('#sub')
 container = document.querySelector('.container')
 let arr = []
 
-sub.addEventListener('click', (event) => {
-    let inp = document.querySelector("#task")
-    let task = inp.value.trim()
+let display = document.querySelector(".display")  // element to show completed count
 
-    if (task === "") return
+// ------------------------------
+// Update completed task count
+// ------------------------------
+function updateCompletedCount() {
+    let completed = arr.filter(t => t.completed).length;
+    display.innerText = completed;
+}
+
+// ------------------------------
+// Save to localStorage
+// ------------------------------
+function saveToLocal() {
+    localStorage.setItem("tasks", JSON.stringify(arr));
+}
+
+// ------------------------------
+// Create a task card
+// ------------------------------
+function createTask(task, completed) {
 
     let div = document.createElement('div')
     let del = document.createElement('button')
@@ -16,40 +32,77 @@ sub.addEventListener('click', (event) => {
 
     p.innerText = task
     checkbox.setAttribute('type', 'checkbox')
+    checkbox.checked = completed
 
+    // Add classes
     div.classList.add('task')
     del.classList.add('remove-btn')
     update.classList.add('update-btn')
 
-    del.innerHTML = `
-    <img src="bin.svg">
-    `
-    update.innerHTML = `
-    <img src="edit.svg">
-    `
+    del.innerText = "remove"
+    update.innerText = "update"
 
-    div.append(checkbox, p, update, del)
+    div.append(checkbox, p, del, update)
     container.append(div)
 
-    arr.push({ entered: task, completed: checkbox.checked })
+    // Strike-through if completed
+    if (completed) p.style.textDecoration = "line-through"
 
+    // Checkbox event
     checkbox.addEventListener('change', () => {
-        if (checkbox.checked) {
-            p.style.textDecoration = "line-through"
-            p.style.color="lightGrey"
-        } else {
-            p.style.textDecoration = 'none'
-            p.style.color="#333"
+        let index = arr.findIndex(t => t.entered === task)
+        if (index !== -1) {
+            arr[index].completed = checkbox.checked
+            saveToLocal()
         }
+
+        p.style.textDecoration = checkbox.checked ? "line-through" : "none"
+        updateCompletedCount()
     })
 
-    del.addEventListener('click', () => div.remove())
-
-    update.addEventListener('click', () => {
-        inp.value = p.innerText
+    // Delete task
+    del.addEventListener('click', () => {
         div.remove()
+        arr = arr.filter(t => t.entered !== task)
+        saveToLocal()
+        updateCompletedCount()
     })
 
-    // Clear input
+    // Update task
+    update.addEventListener('click', () => {
+        document.querySelector("#task").value = p.innerText
+        div.remove()
+        arr = arr.filter(t => t.entered !== task)
+        saveToLocal()
+        updateCompletedCount()
+    })
+}
+
+// ------------------------------
+// Load tasks from localStorage
+// ------------------------------
+window.addEventListener("load", () => {
+    let saved = JSON.parse(localStorage.getItem("tasks")) || []
+    arr = saved
+    saved.forEach(taskObj => {
+        createTask(taskObj.entered, taskObj.completed)
+    })
+    updateCompletedCount()   // IMPORTANT
+})
+
+// ------------------------------
+// Add new task
+// ------------------------------
+sub.addEventListener('click', () => {
+    let inp = document.querySelector("#task")
+    let task = inp.value.trim()
+    if (task === "") return
+
+    createTask(task, false)
+
+    arr.push({ entered: task, completed: false })
+    saveToLocal()
+    updateCompletedCount()
+
     inp.value = ''
 })

@@ -38,6 +38,15 @@ body {
     font-weight: 600;
     color: #333;
 }
+.main .display{
+  height:100px;
+  width: 100px;
+  background-color: green;
+  color: white;
+  border-radius: 50%;
+  margin:20px 50% 10px 50%;
+  transform: translateX(-50%);
+}
 
 /* Input field */
 #task {
