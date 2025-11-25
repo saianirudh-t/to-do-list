@@ -1,39 +1,55 @@
-sub=document.querySelector('#sub')
-container=document.querySelector('.container')
-let arr=[]
-sub.addEventListener('click',(event)=>{
-    let inp=document.querySelector("#task")
-    let task=inp.value
-    let div=document.createElement('div')
-    let del=document.createElement('button')
-    let update=document.createElement('button')
-    let checkbox=document.createElement('input')
-    let p=document.createElement('p')
-    p.innerText=task
-    checkbox.setAttribute('type','checkbox')
-    del.innerText="remove"
-    update.innerText='update'
+sub = document.querySelector('#sub')
+container = document.querySelector('.container')
+let arr = []
+
+sub.addEventListener('click', (event) => {
+    let inp = document.querySelector("#task")
+    let task = inp.value.trim()
+
+    if (task === "") return
+
+    let div = document.createElement('div')
+    let del = document.createElement('button')
+    let update = document.createElement('button')
+    let checkbox = document.createElement('input')
+    let p = document.createElement('p')
+
+    p.innerText = task
+    checkbox.setAttribute('type', 'checkbox')
+
     div.classList.add('task')
-    div.append(checkbox,p,del,update)
-    arr.push({entered:task,completed:false})
+    del.classList.add('remove-btn')
+    update.classList.add('update-btn')
+
+    del.innerHTML = `
+    <img src="bin.svg">
+    `
+    update.innerHTML = `
+    <img src="edit.svg">
+    `
+
+    div.append(checkbox, p, update, del)
     container.append(div)
-    checkbox.addEventListener('change',()=>{
-        if (checkbox.checked){
-            arr.completed=true
-            p.style.textDecoration="line-through"
-            console.log(arr)
-        }
-        else{
-            arr.completed=false
-            p.style.textDecoration='none'
-            console.log(arr)
+
+    arr.push({ entered: task, completed: checkbox.checked })
+
+    checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+            p.style.textDecoration = "line-through"
+            p.style.color="lightGrey"
+        } else {
+            p.style.textDecoration = 'none'
+            p.style.color="#333"
         }
     })
-    del.addEventListener('click',(e)=>div.remove())
-    update.addEventListener('click',(e)=>{
-        inp.value=p.innerText
+
+    del.addEventListener('click', () => div.remove())
+
+    update.addEventListener('click', () => {
+        inp.value = p.innerText
         div.remove()
     })
-    inp.value=''
-    console.log(arr)
+
+    // Clear input
+    inp.value = ''
 })
