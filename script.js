@@ -13,7 +13,9 @@ function updateCompletedCount() {
 
 function progressBar(){
     let done=document.querySelector(".done")
-    let bar=taskDone/totalTasks;
+    let completed = arr.filter(t => t.completed).length
+    let bar=(completed/arr.length)*100
+    console.log(bar)
     done.style.width=`${bar}%`
 }
 function saveToLocal() {
@@ -44,10 +46,10 @@ function createTask(task, completed) {
             arr[index].completed = checkbox.checked
             saveToLocal()
         }
-
         p.style.textDecoration = checkbox.checked ? "line-through" : "none"
         p.style.color=checkbox.checked ? "darkGrey":"#333"
         updateCompletedCount()
+        progressBar()
     })
 
     del.addEventListener('click', () => {
@@ -55,6 +57,7 @@ function createTask(task, completed) {
         arr = arr.filter(t => t.entered !== task)
         saveToLocal()
         updateCompletedCount()
+        progressBar()
     })
 
     update.addEventListener('click', () => {
@@ -63,6 +66,7 @@ function createTask(task, completed) {
         arr = arr.filter(t => t.entered !== task)
         saveToLocal()
         updateCompletedCount()
+        progressBar()
     })
 }
 
@@ -72,14 +76,21 @@ window.addEventListener("load", () => {
     saved.forEach(taskObj => {
         createTask(taskObj.entered, taskObj.completed)
     })
-    updateCompletedCount() 
+    updateCompletedCount()
+    progressBar()
 })
-let main=document.querySelector(".main")
+let disp=document.querySelector(".display")
 let msg=document.createElement('p')
-msg.innerHTML=`<p style="color:red;">Task already exists</p>`
+msg.innerHTML=`<p style="color:red;margin-top:12px;">Task already exists</p>`
 msg.style.display="none"
-main.insertBefore(msg,sub)
-sub.addEventListener('click', () => {
+disp.before(msg)
+sub.addEventListener('click',takeValue)
+document.addEventListener('keydown', (e) => {
+  if (e.key === "Enter") {
+    takeValue();
+  }
+}) 
+    function takeValue() {
     let inp = document.querySelector("#task");
     let task = inp.value.trim()
     if (task === "") return;
@@ -94,6 +105,7 @@ sub.addEventListener('click', () => {
     arr.push({ entered: task, completed: false })
     saveToLocal()
     updateCompletedCount()
+    progressBar()
     inp.value = ""
-})
+}
 

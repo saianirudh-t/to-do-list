@@ -10,18 +10,17 @@
     <div class="container">
         <div class="main">
             <h2>Simple to do list</h2>
-            <input type="text" placeholder="enter the task" id="task" required></input>
-            <input type="submit" value="Add" id="sub"></input>
+            <div class="box"><input type="text" placeholder="enter the task" id="task" required></input>
+            <button id="sub">+</button></div>
             <div class="display">
                 <p id="taskDone">0</p>
                 <span></span>
                 <p id="totalTasks">0</p>
             </div>
             <div class="progress">
-                progress:
+                <p>Progress:</p>
                 <div class="progressbar">
-                    <div class="done">
-                    </div>
+                    <div class="done"></div>
                 </div>
             </div>
         </div>
