@@ -160,7 +160,7 @@ clearAllBtn.addEventListener("click", () => {
 clearCompletedBtn.addEventListener("click", () => {
     let completedTasks=arr.filter(task=>task.completed)
     if (completedTasks.length!=0){
-        msg1.innerHTML=`<p style="color:red";>Total ${completedTasks.length}tasks got removed</p>`
+        msg1.innerHTML=`<p style="color:red";>Total ${completedTasks.length} tasks got removed</p>`
     }
     else{
         msg1.innerHTML=`<p style="color:red">There is no tasks to remove`
@@ -179,3 +179,4 @@ clearCompletedBtn.addEventListener("click", () => {
   updateCompletedCount()
   progressBar()
 })
+
